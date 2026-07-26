@@ -1,4 +1,4 @@
-# CAIN: Causal Attribution and Intervention for Node-Level Fraud Detection on Graphs
+# CAIN Causal Attribution and Intervention for Fraud Detection on Graphs
 
 Reference implementation for the KDD submission. CAIN learns a causal role for
 every edge of a neighbourhood: a graph reconstruction module supplies a
