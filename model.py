@@ -6,25 +6,6 @@ Three modules, trained jointly:
                            into a core (m -> 0) and an env (m -> 1) subgraph
   3. CausalIntervention    classify from the core branch, strip label information
                            from the env branch with a gradient reversal layer
-
-The ablation variants of the paper are selected with the `variant` argument of
-`build_model` and `forward_variant`:
-
-  full             the complete model
-  no_dcd           w/o Decomposition: no core/env split. The reconstruction
-                   signals are injected directly instead, by concatenating
-                   error_node to the node features and using 1 - error_edge as
-                   the edge weight of a single branch
-  no_recon_shape   w/o Reconstruction: the mask network sees only the endpoint
-                   features, so its input drops to 2 * node_feat_dim
-  no_recon_random  a control for no_recon_shape in which the error channels are
-                   resampled from U(0, 1) at every forward pass
-  no_grl           w/o GRL: the env classifier is still trained, but the
-                   gradient is no longer reversed, so the branch cooperates
-                   instead of competing
-
-The w/o L_split variant is obtained by setting w_split to 0 rather than by
-changing the architecture, so it is handled in train.py.
 """
 
 import torch
