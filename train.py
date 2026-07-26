@@ -6,12 +6,6 @@ Main comparison (five runs at the original fraud ratio):
 Robustness under a reduced fraud ratio:
     python train.py --dataset yelpchi --data-path data/yelpchi.mat --ratio 0.05
 
-Ablation (Table 3). w/o L_split is the sweep below with w_split = 0:
-    python train.py --dataset amazon --data-path data/amazon.mat --variant no_grl
-
-Hyperparameter sensitivity (Figure 4), one parameter per call:
-    python train.py --dataset amazon --data-path data/amazon.mat --sweep w_env
-
 Model selection uses validation PR-AUC; the decision threshold is then tuned on
 validation and applied unchanged to the test split.
 """
