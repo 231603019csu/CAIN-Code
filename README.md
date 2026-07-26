@@ -55,35 +55,6 @@ for r in 0.05 0.1 0.3 0.6 1.0; do
 done
 ```
 
-For Amazon the five levels are not produced by down-sampling. They come from
-tightening the helpful-vote threshold that defines the labels, so each level is
-a separate `.mat` file; pass it with `--data-path` and leave `--ratio` at 1.0.
-
-Ablation. `w/o L_split` is the sensitivity sweep at `w_split = 0` rather than an
-architectural change:
-
-```bash
-python train.py --dataset amazon --data-path data/amazon.mat --variant no_dcd
-python train.py --dataset amazon --data-path data/amazon.mat --variant no_grl
-python train.py --dataset amazon --data-path data/amazon.mat --variant no_recon_shape
-```
-
-| flag | paper |
-| --- | --- |
-| `no_dcd` | w/o Decomposition. No core/env split; the reconstruction signals are injected directly, by concatenating `error_node` to the node features and using `1 - error_edge` as the edge weight of a single branch |
-| `no_grl` | w/o GRL. The env classifier is still trained, but the gradient is not reversed, so the branch cooperates instead of competing |
-| `no_recon_shape` | w/o Reconstruction. The mask network sees only the endpoint features |
-| `no_recon_random` | control for the above, with the error channels resampled from U(0,1) at every forward pass |
-
-Hyperparameter sensitivity, one parameter per call over the shared grid:
-
-```bash
-python train.py --dataset amazon --data-path data/amazon.mat --sweep w_env
-python train.py --dataset amazon --data-path data/amazon.mat --sweep w_split
-python train.py --dataset amazon --data-path data/amazon.mat --sweep w_recon
-python train.py --dataset amazon --data-path data/amazon.mat --sweep z_dim
-```
-
 Analyses. Both freeze the trained model and only perturb or inspect its inputs:
 
 ```bash
@@ -91,13 +62,6 @@ python analysis.py edge-removal --dataset yelpchi --data-path data/yelpchi.mat
 python analysis.py semantics    --dataset amazon  --data-path data/amazon.mat
 ```
 
-## Seeds
-
-Every mean and standard deviation in the paper is over five runs. The five
-initialisation seeds per dataset are recorded in `config.SEEDS` and are used by
-default, so `--runs 5` reproduces exactly those runs. Pass `--seed` to override
-them. The data split is separate and fixed by `split_seed=717` in `data.py`, so
-validation and test never move between runs or between fraud ratios.
 
 ## Notes on the objective
 
